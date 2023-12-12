@@ -1,0 +1,48 @@
+.titulo{
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    color: #132b4c;
+}
+
+.nav-link{
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: white;
+}
+
+.nav-link:hover{
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: white;
+}
+
+.navbar{
+    background-color: #132b4c;
+}
+
+.navbar-brand{
+    color: white;
+}
+
+.navbar-brand:hover{
+    color: cornflowerblue;
+}
+
+.botones-accion{
+    text-align: center;
+}
+
+.btn{
+    margin-left: 5%;
+}
+
+.tarjeta{
+    width: 250px;
+    height: 150px;
+    font-size: 100%;
+}
+
+.tarjeta h4{
+    margin-top: 50px;
+}
+
+.navbar-brand h4{
+    margin-top: 0px;
+}

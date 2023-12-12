@@ -1,0 +1,8 @@
+.form-container-settings{
+    display: flex;
+    justify-content: center;
+}
+
+.form-perfil, .form-box{
+    justify-content: center;
+}

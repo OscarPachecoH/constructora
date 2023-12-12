@@ -1,0 +1,11 @@
+.tabla{
+    margin-top: 23px;
+    margin-left: 10%;
+    margin-right: 10%;
+    justify-content: center;
+    justify-items: center;
+    align-items: center;
+    text-align: center;
+    display: block;
+    /*border: 5px solid;*/
+}
