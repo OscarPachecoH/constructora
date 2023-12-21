@@ -40,7 +40,7 @@ const LoginShow = ({setUser}) => {
     const cambiar = async (e) => {
         e.preventDefault()
         if(recuperar.user_email !== ''){
-            await axios.post('http://localhost:9000/recuperarcontra', recuperar)
+            await axios.post('https://constructora-api-test-production.up.railway.app/recuperarcontra', recuperar)
             .then(({data}) => {
                 if(data.message === 'Cambio realizado'){
                     enviarEmail();
@@ -73,7 +73,7 @@ const LoginShow = ({setUser}) => {
         e.preventDefault()
         if(sesion.correo !== '' && sesion.contraseña !== ''){
             
-            await axios.post('http://localhost:9000/login', sesion)
+            await axios.post('https://constructora-api-test-production.up.railway.app/login', sesion)
             .then(({data}) => {
                 if(data.estadoUsuario === 0){
                     alert("El usuario no tiene una obra activa")

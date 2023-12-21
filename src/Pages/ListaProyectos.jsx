@@ -15,7 +15,7 @@ const Lista = ({user, setUser}) => {
     }, [])
 
     const getObras = async () => {
-        const response = await axios.get('http://localhost:9000/obra/' + user.idCliente)
+        const response = await axios.get('https://constructora-api-test-production.up.railway.app/obra/' + user.idCliente)
         setObras(response.data)
     }
 
