@@ -23,7 +23,6 @@ const Gastos = ({user, setUser}) => {
         getResidente()
     }, [])
 
-
     const getGastosMateriales = async () => {
         try{
             const response = await axios.get('http://localhost:9000/gastos/materiales/' + user.idObra)
@@ -35,7 +34,6 @@ const Gastos = ({user, setUser}) => {
         }catch (error){
             alert("algo paso")
         }
-        
     }
 
     const getGastosTramites = async () => {
@@ -124,13 +122,17 @@ const Gastos = ({user, setUser}) => {
 
         doc.addImage(Fondo, "JPEG", 0, 50, 200, 200);
         doc.setFontSize(20);
+
         doc.setTextColor(19,43,76)
         doc.setFont("times", "bold")
         doc.text("Control de Materiales", 70, 20);
+
         doc.setLineWidth(1.5);
         doc.line(10, 23, 200, 23);
+
         doc.addImage(Logo, "JPEG", 14, 24, 25, 25);
         doc.setFontSize(15);
+
         doc.text("Obra: ", 45, 30);
         doc.text("Ubicación: ", 45, 35);
         doc.text("Ciudad: Chilpancingo", 45, 40);
@@ -138,6 +140,7 @@ const Gastos = ({user, setUser}) => {
         doc.setFontSize(10);
         doc.text("Fecha: ", 165, 45);
         doc.text(fecha(), 180, 45)
+        
         doc.setLineWidth(1);
         doc.line(10, 50, 200, 50);
 
@@ -147,7 +150,6 @@ const Gastos = ({user, setUser}) => {
             head: [columns],
             body: data
         })
-
 
         doc.setDrawColor(19,43,76);
 
@@ -219,7 +221,6 @@ const Gastos = ({user, setUser}) => {
 
         return fecha
     }
-
     
     return(
         <div>

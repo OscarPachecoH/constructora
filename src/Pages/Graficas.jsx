@@ -18,14 +18,11 @@ Chartjs.register(
 
 const Graficas = ({user, setUser}) => {
 
-    const [data, setData] = useState([]);
+    const [data, setData] = useState({});
 
     useEffect(() => {
         getTotalPisos()
     }, [])
-
-    var totalPisos = [];
-    var porcentaje = [];
 
     const getTotalPisos = async () => {
         try{
@@ -62,7 +59,8 @@ const Graficas = ({user, setUser}) => {
         datasets :[
             {
                 label : 'Porcentaje avanzado',
-                data: Array.isArray(data) ? data.map((entry) => (entry.cantidadTotal * 100 / 240)) : [],
+                barPercentage: 1.2,
+                data: Array.isArray(data) ? data.map((entry) => Math.round(entry.cantidadTotalAvanzado * 100 / entry.cantidadTotalFinal)) : [],
                 backgroundColor: '#132b4c'
             }
         ]
@@ -71,7 +69,9 @@ const Graficas = ({user, setUser}) => {
     return(
         <div>
             <Dashboard user={user} setUser={setUser}/>
-            <div><Bar data={midata} options={misoptions}/></div>
+            <div className="grafica">
+                <Bar data={midata} options={misoptions}/>
+            </div>
         </div>
     )
 }

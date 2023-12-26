@@ -56,7 +56,7 @@ const LoginShow = ({setUser}) => {
 
     const [sesion, setSesion] = useState({
         correo: '',
-        contraseña: ''
+        contrasenia: ''
     })
 
     const navigate = useNavigate()
@@ -71,7 +71,7 @@ const LoginShow = ({setUser}) => {
 
     const iniciar = async (e) => {
         e.preventDefault()
-        if(sesion.correo !== '' && sesion.contraseña !== ''){
+        if(sesion.correo !== '' && sesion.contrasenia !== ''){
             
             await axios.post('https://constructora-api-test-production.up.railway.app/login', sesion)
             .then(({data}) => {
@@ -85,11 +85,11 @@ const LoginShow = ({setUser}) => {
             .catch(({response}) => {
                 if(response.data.message === 'Cliente no encontrado'){
                     alert('No hay un registro con este correo')
-                    setSesion({...sesion, correo:'', contraseña:''})
+                    setSesion({...sesion, correo:'', contrasenia:''})
                 }else if(response.data.message === 'Contraseña incorrecta'){
                     //alert('Error... Verifique sus datos')
                     setSesionErrorP(true)
-                    setSesion({...sesion, correo:'', contraseña:''})
+                    setSesion({...sesion, correo:'', contrasenia:''})
                 }
                 console.log(response.data.message)
             })
@@ -97,7 +97,7 @@ const LoginShow = ({setUser}) => {
             setSesionErrorCV(true)
             setSesionErrorP(false)
         }
-        if(sesion.contraseña !== '' && sesion.contraseña.length <= 7){
+        if(sesion.contrasenia !== '' && sesion.contrasenia.length <= 7){
             //alert('La contraseña debe ser mayor a 7 caracteres')
             setSesionErrorCV(false)
             setSesionErrorP(true)
@@ -133,9 +133,9 @@ const LoginShow = ({setUser}) => {
                                     <input 
                                         type="password" 
                                         id="contraseña"
-                                        name="contraseña"
+                                        name="contrasenia"
                                         placeholder="Contraseña"
-                                        value={sesion.contraseña}
+                                        value={sesion.contrasenia}
                                         onChange={inputChange}
                                         />
                                     {
