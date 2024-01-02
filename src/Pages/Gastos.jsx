@@ -25,8 +25,7 @@ const Gastos = ({user, setUser}) => {
 
     const getGastosMateriales = async () => {
         try{
-            const response = await axios.get('http://localhost:9000/gastos/materiales/' + user.idObra)
-            //console.log(response.data);
+            const response = await axios.get('https://constructora-api-test-production.up.railway.app/gastos/materiales/' + user.idObra)
             if(response.data <= 1){
                 alert("Todavia no hay resgistro")
             }
@@ -38,7 +37,7 @@ const Gastos = ({user, setUser}) => {
 
     const getGastosTramites = async () => {
         try{
-            const response = await axios.get('http://localhost:9000/gastos/tramites/' + user.idObra)
+            const response = await axios.get('https://constructora-api-test-production.up.railway.app/gastos/tramites/' + user.idObra)
             setGastosTramites(response.data)
         }catch(error){
             alert("Algo paso")
@@ -47,7 +46,7 @@ const Gastos = ({user, setUser}) => {
 
     const getGastosMaquinaria = async () => {
         try{
-            const response = await axios.get('http://localhost:9000/gastos/maquinaria/' + user.idObra)
+            const response = await axios.get('https://constructora-api-test-production.up.railway.app/gastos/maquinaria/' + user.idObra)
             setGastosMaquinaria(response.data)
         }catch(error){
             alert('Algo paso')
@@ -56,7 +55,7 @@ const Gastos = ({user, setUser}) => {
 
     const getGastosAdicionales = async () => {
         try{
-            const response = await axios.get('http://localhost:9000/gastos/adicionales/' + user.idObra)
+            const response = await axios.get('https://constructora-api-test-production.up.railway.app/gastos/adicionales/' + user.idObra)
             setGastosAdicionales(response.data)
         }catch(error){
             alert('Algo paso')
@@ -64,7 +63,7 @@ const Gastos = ({user, setUser}) => {
     }
 
     const getResidente = async () => {
-        const response = await axios.get('http://localhost:9000/obra/residente/' + user.idObra)
+        const response = await axios.get('https://constructora-api-test-production.up.railway.app/obra/residente/' + user.idObra)
         setDatosObra(response.data)
     }
 
@@ -204,10 +203,6 @@ const Gastos = ({user, setUser}) => {
         doc.line(142, 271, 196, 271)
 
         doc.output('dataurlnewwindow')
-
-        // console.log(datosObra.residente)
-        //doc.save('materiales.pdf')
-        //console.log(fecha())
     }
 
     function fecha(){

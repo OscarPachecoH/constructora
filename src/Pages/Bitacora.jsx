@@ -8,11 +8,7 @@ const Bitacora = ({user, setUser}) => {
         <div>
             <Dashboard user={user} setUser={setUser}/>
             <div className="content">
-                <form action="">
-                    <h3>Selecione la fecha que desea</h3>
-                    <input type="date" name="" id="" required/>
-                    <button className="btn btn-danger"><FaRegFilePdf/> Generar</button>
-                </form>
+                <h1>En proceso...</h1>
             </div>
         </div>
     )

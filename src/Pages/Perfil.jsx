@@ -26,11 +26,10 @@ const Perfil = ({user, setUser}) => {
 
     const cambio = async (e) => {
         e.preventDefault()
-        //console.log(cambioContra)
         if(cambioContra.nuevaContraseña !== cambioContra.confnuevaContraseña){
             alert('Las contraseñas no coinciden')
         }else{
-            await axios.patch('http://localhost:9000/cambiocontra/' + id, cambioContra)
+            await axios.patch('https://constructora-api-test-production.up.railway.app/cambiocontra/' + id, cambioContra)
             .then(({data}) => {
                 console.log(data);
                 if(data.message === 'No hubo cambios'){

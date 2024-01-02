@@ -26,7 +26,7 @@ const Graficas = ({user, setUser}) => {
 
     const getTotalPisos = async () => {
         try{
-            const response = await axios.get('http://localhost:9000/graficas/totalCantidadPiso/' + user.idObra)
+            const response = await axios.get('https://constructora-api-test-production.up.railway.app/graficas/totalCantidadPiso/' + user.idObra)
             const jsonData = response.data
             setData(jsonData)
         }catch(error){
