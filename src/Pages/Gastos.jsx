@@ -107,7 +107,7 @@ const Gastos = ({user, setUser}) => {
         const doc = new jsPDF()
 
         const nombreCliente = user.nombreCliente + " " + user.apellidoPCliente + " " + user.apellidoMCliente;
-        const repreLegal = datosObra.repreLegal
+        const repreLegal = "ING. ROSALIO SUASTEGUI MOLINA"
         const repreObra = datosObra.residente
 
         const columns = ["No.", "Concepto", "Total"]
