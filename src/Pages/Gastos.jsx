@@ -20,12 +20,12 @@ const Gastos = ({user, setUser}) => {
         getGastosTramites()
         getGastosMaquinaria()
         getGastosAdicionales()
-        getResidente()
+        getDastosGeneralesObra()
     }, [])
 
     const getGastosMateriales = async () => {
         try{
-            const response = await axios.get('https://constructora-api-test-production.up.railway.app/gastos/materiales/' + user.idObra)
+            const response = await axios.get('http://localhost:9000/gastos/materiales/' + user.idObra)
             if(response.data <= 1){
                 alert("Todavia no hay resgistro")
             }
@@ -37,7 +37,7 @@ const Gastos = ({user, setUser}) => {
 
     const getGastosTramites = async () => {
         try{
-            const response = await axios.get('https://constructora-api-test-production.up.railway.app/gastos/tramites/' + user.idObra)
+            const response = await axios.get('http://localhost:9000/gastos/tramites/' + user.idObra)
             setGastosTramites(response.data)
         }catch(error){
             alert("Algo paso")
@@ -46,7 +46,7 @@ const Gastos = ({user, setUser}) => {
 
     const getGastosMaquinaria = async () => {
         try{
-            const response = await axios.get('https://constructora-api-test-production.up.railway.app/gastos/maquinaria/' + user.idObra)
+            const response = await axios.get('http://localhost:9000/gastos/maquinaria/' + user.idObra)
             setGastosMaquinaria(response.data)
         }catch(error){
             alert('Algo paso')
@@ -55,15 +55,15 @@ const Gastos = ({user, setUser}) => {
 
     const getGastosAdicionales = async () => {
         try{
-            const response = await axios.get('https://constructora-api-test-production.up.railway.app/gastos/adicionales/' + user.idObra)
+            const response = await axios.get('http://localhost:9000/gastos/adicionales/' + user.idObra)
             setGastosAdicionales(response.data)
         }catch(error){
             alert('Algo paso')
         }
     }
 
-    const getResidente = async () => {
-        const response = await axios.get('https://constructora-api-test-production.up.railway.app/obra/residente/' + user.idObra)
+    const getDastosGeneralesObra = async () => {
+        const response = await axios.get('http://localhost:9000/obra/datosgenerales/' + user.idObra)
         setDatosObra(response.data)
     }
 
@@ -104,11 +104,13 @@ const Gastos = ({user, setUser}) => {
     }
 
     const generarPDF = () => {
-        const doc = new jsPDF()
+        const doc = new jsPDF({format:"letter"});
 
         const nombreCliente = user.nombreCliente + " " + user.apellidoPCliente + " " + user.apellidoMCliente;
-        const repreLegal = "ING. ROSALIO SUASTEGUI MOLINA"
-        const repreObra = datosObra.residente
+        const repreLegal = "ING. ROSALIO SUASTEGUI MOLINA";
+        const repreObra = datosObra.residente;
+        const nombreObra = datosObra.nombreObra;
+        const ubicacionObra = datosObra.direccionObra;
 
         const columns = ["No.", "Concepto", "Total"]
         const data = [
@@ -119,90 +121,99 @@ const Gastos = ({user, setUser}) => {
             ["","Total:","$" + number(totalGastosMateriales() + totalGastosTramites() + totalGastosMaquinaria() + totalGastosAdicionales())]
         ]
 
+        const data2 = [
+            ["ELABORO:", "Vo. Bo.",""],
+            ["ROSMO COIN S.A. DE C.V.", "", ""],
+            ["_______________________","_______________________","________________________"],
+            [repreLegal, repreObra.toUpperCase(), nombreCliente.toUpperCase()],
+            ["REPRESENTANTE LEGAL", "REPRESENTANTE DE OBRA", "DUEÑO DE OBRA"]
+        ]
+
+        //fondo de pagina
         doc.addImage(Fondo, "JPEG", 0, 50, 200, 200);
         doc.setFontSize(20);
 
+        //titulo
         doc.setTextColor(19,43,76)
         doc.setFont("times", "bold")
-        doc.text("Control de Materiales", 70, 20);
+        doc.text("Gastos de obra", 70, 20);
 
         doc.setLineWidth(1.5);
         doc.line(10, 23, 200, 23);
 
+        //logo de empresa
         doc.addImage(Logo, "JPEG", 14, 24, 25, 25);
         doc.setFontSize(15);
 
+        //datos de obra
         doc.text("Obra: ", 45, 30);
+        doc.text(nombreObra, 60, 30);
         doc.text("Ubicación: ", 45, 35);
+        doc.text(ubicacionObra, 70, 35);
         doc.text("Ciudad: Chilpancingo", 45, 40);
-        doc.text("Estado: Guerro", 45, 45);
+        doc.text("Estado: Guerrero", 45, 45);
         doc.setFontSize(10);
         doc.text("Fecha: ", 165, 45);
-        doc.text(fecha(), 180, 45)
-        
+        doc.text(fecha(), 180, 45);
+
         doc.setLineWidth(1);
         doc.line(10, 50, 200, 50);
 
+        //tabla de datos
         doc.autoTable({
             theme: 'plain',
-            startY: 50,
+            styles: {
+                
+                font: 'times',
+                fontSize: 12
+            },
+            startY: 55,
             head: [columns],
             body: data
-        })
+        });
 
         doc.setDrawColor(19,43,76);
 
         doc.setLineWidth(1);
         
-        //lineas verticales
-        doc.line(10, 250, 10, 285);
-        doc.line(73, 250, 73, 285);
-        doc.line(139, 250, 139, 285);
-        doc.line(200, 250, 200, 285);
+        //lineas verticales pie de pagina
+        doc.line(10, 235, 10, 270);
+        doc.line(73, 235, 73, 270);
+        doc.line(139, 235, 139, 270);
+        doc.line(200, 235, 200, 270);
         
-        //lineas horizontales
-        doc.line(9, 250, 200, 250);
-        doc.line(9, 284, 200, 284);
+        //lineas horizontales pie de pagina
+        doc.line(10, 235, 200, 235);
+        doc.line(10, 270, 200, 270);
         
-        //textos
+        //textos de pie de pagina
         doc.setFont("helvetica", "bold");
         doc.setFontSize(10);
-        doc.text("ELABORÓ:", 30, 255)
-        doc.text(repreLegal,11, 276)
         
-        doc.setLineWidth(0.5);
-        doc.line(12, 271, 70, 271)
-        
-        doc.setFont("helvetica", "normal");
-        doc.setFontSize(10);
-        doc.text("ROSMO COIN S.A. DE C.V.", 18, 260);
-        doc.text("REPRESENTANTE LEGAL", 20, 280);
-        
-        doc.setFont("helvetica", "bold");
-        doc.setFontSize(10);
-        doc.text("Vo. Bo.:", 100, 255)
-        doc.text(repreObra.toUpperCase(), 79, 276)
-        
-        doc.setFont("helvetica", "normal");
-        doc.setFontSize(10);
-        doc.text("REPRESENTANTE DE OBRA", 83, 280);
-        
-        doc.setLineWidth(0.5);
-        doc.line(76, 271, 135, 271)
-        
-        doc.setFont("helvetica", "bold");
-        doc.setFontSize(10);
-        doc.text("Vo. Bo.:", 100, 255)
-        doc.text(nombreCliente.toUpperCase(), 146, 276)
-        
-        doc.setFont("helvetica", "normal");
-        doc.setFontSize(10);
-        doc.text("DUEÑO DE OBRA", 155, 280);
-        
-        doc.setLineWidth(0.5);
-        doc.line(142, 271, 196, 271)
+        doc.text("ELABORÓ:", 30, 240)
+        doc.text(repreLegal,11, 260)
 
-        doc.output('dataurlnewwindow')
+        doc.text("Vo. Bo.:", 100, 240)
+        doc.text(repreObra.toUpperCase(), 79, 260)
+
+        doc.text(nombreCliente.toUpperCase(), 146, 260)
+
+        //linea para firma
+        doc.setLineWidth(0.5);
+        doc.line(12, 255, 70, 255)
+        doc.line(76, 255, 135, 255)
+        doc.line(142, 255, 196, 255)
+        
+        doc.setFont("helvetica", "normal");
+        doc.setFontSize(10);
+        doc.text("ROSMO COIN S.A. DE C.V.", 18, 245);
+        doc.text("REPRESENTANTE LEGAL", 20, 265);
+        doc.text("REPRESENTANTE DE OBRA", 83, 265);
+        doc.text("DUEÑO DE OBRA", 155, 265);
+        
+        doc.output('dataurlnewwindow',{
+            filename: 'gastos de obra'
+        })
     }
 
     function fecha(){

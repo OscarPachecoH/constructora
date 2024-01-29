@@ -6,7 +6,10 @@ import { FaUser, FaRightFromBracket, FaHouse, FaLock } from "react-icons/fa6";
 
 const Perfil = ({user, setUser}) => {
 
-    const id = user.idCliente
+    const id = user.idCliente;
+
+    const [cambioError1, setCambioError1] = useState(false);
+    const [cambioError2, setCambioError2] = useState(false);
 
     const logout = () => setUser(null)
 
@@ -26,10 +29,13 @@ const Perfil = ({user, setUser}) => {
 
     const cambio = async (e) => {
         e.preventDefault()
+        //console.log(cambioContra)
         if(cambioContra.nuevaContraseña !== cambioContra.confnuevaContraseña){
-            alert('Las contraseñas no coinciden')
+            //alert('Las contraseñas no coinciden')
+            setCambioError2(true);
+            setTimeout(() => setCambioError2(false), 3000);
         }else{
-            await axios.patch('https://constructora-api-test-production.up.railway.app/cambiocontra/' + id, cambioContra)
+            await axios.patch('http://localhost:9000/cambiocontra/' + id, cambioContra)
             .then(({data}) => {
                 console.log(data);
                 if(data.message === 'No hubo cambios'){
@@ -39,7 +45,9 @@ const Perfil = ({user, setUser}) => {
                 }
             })
             .catch(({response}) => {
-                alert('Error... Revise su contraseña antigua')
+                //alert('Error... Revise su contraseña antigua')
+                setCambioError1(true);
+                setTimeout(() => setCambioError1(false), 3000);
                 console.log(response.data);
             })
         }
@@ -94,6 +102,12 @@ const Perfil = ({user, setUser}) => {
                                     onChange={inputChange}
                                     required
                                 />
+                                {
+                                    cambioError1 &&
+                                    <div className="alert alert-danger">
+                                        Error... Revise su contraseña antigua
+                                    </div>
+                                }
                             </div>
                             <div className="form-input">
                                 <span><FaLock/></span>
@@ -117,6 +131,12 @@ const Perfil = ({user, setUser}) => {
                                     required
                                 />
                             </div>
+                            {
+                                cambioError2 &&
+                                <div className="alert alert-danger">
+                                    Error... Las contraseñas no coinciden
+                                </div>
+                            }
                             <button className="btn btn-success">Cambiar</button>
                         </form>
                     </div>

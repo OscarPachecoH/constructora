@@ -26,7 +26,7 @@ const Graficas = ({user, setUser}) => {
 
     const getTotalPisos = async () => {
         try{
-            const response = await axios.get('https://constructora-api-test-production.up.railway.app/graficas/totalCantidadPiso/' + user.idObra)
+            const response = await axios.get('http://localhost:9000/graficas/totalCantidadPiso/' + user.idObra)
             const jsonData = response.data
             setData(jsonData)
         }catch(error){
@@ -61,7 +61,8 @@ const Graficas = ({user, setUser}) => {
                 label : 'Porcentaje avanzado',
                 barPercentage: 1.2,
                 data: Array.isArray(data) ? data.map((entry) => Math.round(entry.cantidadTotalAvanzado * 100 / entry.cantidadTotalFinal)) : [],
-                backgroundColor: '#132b4c'
+                backgroundColor: '#132b4c',
+                barThickness: 150
             }
         ]
     }

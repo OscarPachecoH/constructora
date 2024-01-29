@@ -10,15 +10,31 @@ const LoginShow = ({setUser}) => {
 
     const form = useRef()
 
+    //https://clientbk-system.rosmocoin.com/ cambiar ruta
+
     const [sesionErrorCV, setSesionErrorCV] = useState(false)
     const [sesionErrorP, setSesionErrorP] = useState(false)
     const [recuperarError, setErrorR] = useState(false)
+    const [recuperarError2, setErrorR2] = useState(false)
 
     const [recuperarSuccess, setSuccessR] = useState(false)
+
+    const [sesion, setSesion] = useState({
+        correo: '',
+        contraseña: ''
+    })
 
     const [recuperar, setRecupera] = useState({
         user_email: ''
     })
+
+    const inputChange = ({target}) =>{
+        const {name, value} = target
+        setSesion({
+            ...sesion,
+            [name]: value
+        })
+    }
 
     const inputChange2 = ({target}) => {
         const {name, value} = target
@@ -40,13 +56,16 @@ const LoginShow = ({setUser}) => {
     const cambiar = async (e) => {
         e.preventDefault()
         if(recuperar.user_email !== ''){
-            await axios.post('https://constructora-api-test-production.up.railway.app/recuperarcontra', recuperar)
+            await axios.post('http://localhost:9000/recuperarcontra', recuperar)
             .then(({data}) => {
                 if(data.message === 'Cambio realizado'){
                     enviarEmail();
-                    //alert('Se envio el correo')
                     setErrorR(false)
                     setSuccessR(true)
+                }
+                if(data.message === 'Datos incorrectos'){
+                    setErrorR2(true)
+                    setSuccessR(false)
                 }
             })
         }else{
@@ -54,26 +73,13 @@ const LoginShow = ({setUser}) => {
         }
     }
 
-    const [sesion, setSesion] = useState({
-        correo: '',
-        contrasenia: ''
-    })
-
     const navigate = useNavigate()
-
-    const inputChange = ({target}) =>{
-        const {name, value} = target
-        setSesion({
-            ...sesion,
-            [name]: value
-        })
-    }
 
     const iniciar = async (e) => {
         e.preventDefault()
-        if(sesion.correo !== '' && sesion.contrasenia !== ''){
+        if(sesion.correo !== '' && sesion.contraseña !== ''){
             
-            await axios.post('https://constructora-api-test-production.up.railway.app/login', sesion)
+            await axios.post('http://localhost:9000/login', sesion)
             .then(({data}) => {
                 if(data.estadoUsuario === 0){
                     alert("El usuario no tiene una obra activa")
@@ -85,11 +91,11 @@ const LoginShow = ({setUser}) => {
             .catch(({response}) => {
                 if(response.data.message === 'Cliente no encontrado'){
                     alert('No hay un registro con este correo')
-                    setSesion({...sesion, correo:'', contrasenia:''})
+                    setSesion({...sesion, correo:'', contraseña:''})
                 }else if(response.data.message === 'Contraseña incorrecta'){
                     //alert('Error... Verifique sus datos')
                     setSesionErrorP(true)
-                    setSesion({...sesion, correo:'', contrasenia:''})
+                    setSesion({...sesion, correo:'', contraseña:''})
                 }
                 console.log(response.data.message)
             })
@@ -97,7 +103,7 @@ const LoginShow = ({setUser}) => {
             setSesionErrorCV(true)
             setSesionErrorP(false)
         }
-        if(sesion.contrasenia !== '' && sesion.contrasenia.length <= 7){
+        if(sesion.contraseña !== '' && sesion.contraseña.length <= 7){
             //alert('La contraseña debe ser mayor a 7 caracteres')
             setSesionErrorCV(false)
             setSesionErrorP(true)
@@ -133,21 +139,21 @@ const LoginShow = ({setUser}) => {
                                     <input 
                                         type="password" 
                                         id="contraseña"
-                                        name="contrasenia"
+                                        name="contraseña"
                                         placeholder="Contraseña"
-                                        value={sesion.contrasenia}
+                                        value={sesion.contraseña}
                                         onChange={inputChange}
                                         />
                                     {
                                         sesionErrorCV &&
                                         <div className="alert alert-danger">
-                                            Hay un error... Los campos son obrigatorios
+                                            Hay un error... Los campos son obrigatorios.
                                         </div>
                                     }
                                     {
                                         sesionErrorP &&
                                         <div className="alert alert-danger">
-                                            <h9>Ups... Verifique que sus datos sean correctos</h9>
+                                            <h9>Ups... Verifique que sus datos sean correctos.</h9>
                                         </div>
                                     }
                                 </div>
@@ -182,13 +188,19 @@ const LoginShow = ({setUser}) => {
                                             {
                                                 recuperarError &&
                                                 <div className="alert alert-danger">
-                                                    Hay un error... Los campos son obrigatorios
+                                                    Hay un error... Los campos son obrigatorios.
+                                                </div>
+                                            }
+                                            {
+                                                recuperarError2 &&
+                                                <div className="alert alert-danger">
+                                                    Hay un error... Verifique que sus datos sean correctos.
                                                 </div>
                                             }
                                             {
                                                 recuperarSuccess &&
                                                 <div className="alert alert-success">
-                                                    Correo Enviado
+                                                    Correo Enviado.
                                                 </div>
                                             }
                                         </div>
